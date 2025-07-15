@@ -10,18 +10,19 @@
 (() => {
     "use strict";
 
+    const settingsKey = "userSubmissions.lastVisited";
     const [_, username, section] = document.location.pathname
         .split("/")
         .filter(str => str.length);
 
+    const userLastVisited = JSON.parse(localStorage.getItem(settingsKey)) ?? {};
 
     if (!section) {
-        const userLastVisited = JSON.parse(localStorage.getItem("userSubmissions.lastVisited")) ?? {};
         const lastVisited = userLastVisited[username];
 
         if (!lastVisited || new Date().getTime() - lastVisited > 1000 * 60 * 60) {
             userLastVisited[username] = new Date().getTime();
-            localStorage.setItem("userSubmissions.lastVisited", JSON.stringify(userLastVisited));
+            localStorage.setItem(settingsKey, JSON.stringify(userLastVisited));
 
             document.location = document.location + "/submitted/";
         }
