@@ -2,7 +2,7 @@
 // @name          Reddit User Submissions
 // @description   Make the submissions tab the default view when viewing a user's page on Reddit
 // @author        VoltronicAcid
-// @version       0.0.2
+// @version       0.0.3
 // @icon          https://www.google.com/s2/favicons?sz=64&domain=reddit.com
 // @match         https://*reddit.com/user/*
 // ==/UserScript==
@@ -14,6 +14,16 @@
     const [_, username, section] = document.location.pathname
         .split("/")
         .filter(str => str.length);
+    const userLinks = document.querySelectorAll("span.user > a");
+
+    if (userLinks.length === 1) {
+        const me = userLinks[0].href
+            .split("/")
+            .filter(str => str.length)
+            .at(-1);
+
+        if (username === me) return;
+    }
 
     const userLastVisited = JSON.parse(localStorage.getItem(settingsKey)) ?? {};
     const cachedUsernames = Object.keys(userLastVisited);
